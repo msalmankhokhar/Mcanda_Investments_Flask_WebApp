@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block mainslider %} {% endblock mainslider %}
+
+{% block mainbody %} 
+
+        <!--Contact Page Start-->
+        <section class="contact-page">
+            <div class="container">
+                <div class="contact-page__top">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="contact-page__left">
+                                <div class="contact-page__img-box">
+                                    <div class="contact-page__img">
+                                        <img src="static/assets/images/mcanda/contact.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="contact-page__right">
+                                <div class="section-title text-left">
+                                    <div class="section-title__icon">
+                                        <span class="fa fa-star"></span>
+                                    </div>
+                                    <span class="section-title__tagline">mcanda investments (pty) ltd</span>
+                                    <h2 class="section-title__title">Get in touch now</h2>
+                                </div>
+                                <p class="contact-page__text">If you have any query, don't hesitate to contact us.</p>
+                                <ul class="list-unstyled contact-page__contact-list">
+                                    <li>
+                                        <div class="icon">
+                                            <span class="icon-telephone"></span>
+                                        </div>
+                                        <div class="content">
+                                            <p>Have any Question?</p>
+                                            <h4><a href="tel:+26876076247"><span>Free</span> (+268) 76076247</a></h4>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">
+                                            <span class="icon-email"></span>
+                                        </div>
+                                        <div class="content">
+                                            <p>Write Email</p>
+                                            <h4><a href="mailto:info@mcandainvestment.com">info@mcandainvestment.com</a></h4>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">
+                                            <span class="icon-pin"></span>
+                                        </div>
+                                        <div class="content">
+                                            <p>Visit Anytime</p>
+                                            <h4>Opp UNESWA entrance, Kwaluseni, Matsapha</h4>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-page__bottom">
+                    <div class="contact-page__bottom-left">
+                        <div class="contact-page__bottom-icon">
+                            <span class="icon-clock"></span>
+                        </div>
+                        <ul class="contact-page__bottom-content list-unstyled">
+                            <li>
+                                <span>Mon - Friday</span>
+                                <p>7:00 am to 5:00 pm</p>
+                            </li>
+                            <li>
+                                <span>Saturday</span>
+                                <p>7:00 am to 5:00 pm</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="contact-page__bottom-right">
+                        <div class="contact-page__social">
+                            <div class="contact-page__social-shape-1 float-bob-x">
+                                <img src="static/assets/images/shapes/contact-page-shape-1.png" alt="">
+                            </div>
+                            <span>Social Media</span>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Contact Page End-->
+
+        <!--Google Map Start-->
+        <section class="google-map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7142.277251415698!2d31.
+                302611254535815!3d-26.483481075406022!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.
+                1!3m3!1m2!1s0x1eef4b39ba43e13f%3A0x793e3fe401bd92bf!2sMcanda%20Investments!5e0
+                !3m2!1sen!2s!4v1691070222325!5m2!1
+                sen!2s" class="google-map__one" allowfullscreen=""></iframe>
+
+        </section>
+        <!--Google Map End-->
+
+        <!--Contact One Start-->
+        <section class="contact-one">
+            <div class="contact-one__bg" style="background-image: url(/static/assets/images/backgrounds/contact-one-bg.png);">
+            </div>
+            <div class="container">
+                <div class="section-title text-center">
+                    <div class="section-title__icon">
+                        <span class="fa fa-star"></span>
+                    </div>
+                    <span class="section-title__tagline">contact us</span>
+                    <h2 class="section-title__title">Feel free to get in touch
+                        <br>with Mcanda</h2>                      
+                </div>
+                <div class="contact-one__form-box">
+                    <form action="" id="contact-form" method="POST" class="contact-one__form contact-form-validated" novalidate="novalidate">
+                           <div class="row">
+                            <div class="col-xl-6">
+                                <div class="contact-one__input-box">
+                                
+                                    <input type="text" placeholder="Your Name" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="contact-one__input-box">
+                                    <input type="email" placeholder="Email Address" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="contact-one__input-box text-message-box">
+                                    <textarea name="msg" placeholder="Write a message for us" required></textarea>
+                                </div>
+                                <div class="contact-one__btn-box">
+                                    <button type="submit" class="g-recaptcha" name="submit_form" value="Send">Send a Message</button>
+                                    <!-- <button type="submit">Send a Message</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </section>
+        <!--Contact One End-->
+        
+        {% endblock mainbody %}
