@@ -42,8 +42,8 @@ db = SQLAlchemy(app)
 
 # Creating database schema
 class subscribers(db.Model):
-    s = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email = db.Column(db.String(50), unique=True)
+    s = db.Column(db.Integer, nullable=True, unique=False)
+    email = db.Column(db.String(50), primary_key=True, nullable=False)
 
 # creating database tables
 with app.app_context():
