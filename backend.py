@@ -5,16 +5,19 @@ from threading import Thread
 from time import sleep
 from os.path import join
 from werkzeug.utils import secure_filename
+from markupsafe import Markup
 
 app = Flask(__name__)
 
+app.secret_key = 'salman'
+
 # mail settings
 app.config['MAIL_SERVER']='mail.mcandainvest.com'
-app.config['MAIL_PORT'] = 587
+app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'info@mcandainvest.com'
 app.config['MAIL_PASSWORD'] = 'mcandain123!'
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 app.config['EMAIL_HTML_FILES_FOLDER'] = 'EMAIL_UPLOADS'
 
 mail = Mail(app)
@@ -23,8 +26,10 @@ def send_mail(emailobj):
     with app.app_context():
         try:
             mail.send(emailobj)
+            return True
         except Exception as e:
-            pass
+            print(f'Error is\n{e}')
+            return False
 
 def send_subscription_mail(content, recipient_email):
     mailobj =  Message(
@@ -37,6 +42,7 @@ def send_subscription_mail(content, recipient_email):
     return True
 
 # setting up SQLite Database
+app.secret_key = "salman"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'
 db = SQLAlchemy(app)
 
@@ -74,24 +80,47 @@ def contact():
         name = request.form.get('name')
         email = request.form.get('email')
         user_msg = request.form.get('msg')
+
+        owner_email_content = Markup(f"A user has dropped a messege on your website's contact page.<br><br><h3>User data:</h3><br><strong>Name: </strong><br> {name}<br><strong>Email: </strong><br> {email}<br><br><strong>User Message: </strong><br> {user_msg}<br>")
+        user_email_content = Markup('We have received your message. Our team will reach you back as soon as possible.<br>Have a good day!')
+        
         email_for_user = Message(
             subject='Thanks for contacting Mcanda Investments',
-            html='<strong>Mcanda Investments</strong> has received your message. Our team will reach you back as soon as possible.<br>Have a good day!',
+            html=render_template('email/contact_form_user.html', name=name, content=user_email_content),
             recipients=[email],
             sender=('Mcanda Investments', 'info@mcandainvest.com')
             )
+        
         email_for_owner = Message(
             "New Notification",
             sender=("Mcanda Investments", 'info@mcandainvest.com'),
-            # recipients=["kjokhars@gmail.com", "mxolisimasuku5@gmail.com"],
-            recipients=["kjokhars@gmail.com"],
-            html=f"A user has dropped a messege on your website's contact page.<br><h3>User date:</h3><br><strong>Name: </strong> {name}<br><strong>Email: </strong> {email}<br><strong>User Message: </strong> {user_msg}<br>"
+            recipients=["kjokhars@gmail.com", "mxolisimasuku5@gmail.com"],
+            # recipients=["kjokhars@gmail.com"],
+            html=render_template('email/contact_form_owner.html', content=owner_email_content)
             )
-        email_thread_owner = Thread(target=send_mail, args=[email_for_owner])
-        email_thread_user = Thread(target=send_mail, args=[email_for_user])    
-        email_thread_owner.start()
-        email_thread_user.start()
-        return 'Message sent successfull. Keep checking your mail box. Our team will reply you within 2 - 3 minutes'
+        # email_thread_owner = Thread(target=send_mail, args=[email_for_owner])
+        # email_thread_user = Thread(target=send_mail, args=[email_for_user])    
+        # email_thread_owner.start()
+        # email_thread_user.start()
+
+        ownerEmailStatus = send_mail(email_for_user)
+        userEmailStatus = send_mail(email_for_owner)
+
+        # ownerEmailStatus = True
+        # userEmailStatus =  False
+        if userEmailStatus == True and ownerEmailStatus == True:
+            responseMsg = 'Message sent successfully. Keep checking your email inbox. Our team will reply you within 2 - 3 minutes'
+            return {
+                'isEmailSent' : True,
+                'msg' : responseMsg
+            }
+        else:
+            responseMsg = 'Sorry, the email was not sent due to a technical fault on the server'
+            return {
+                'isEmailSent' : False,
+                'msg' : responseMsg
+            }
+
 
 @app.route('/subscribe', methods=['GET', 'POST'])
 def subscribe():
@@ -117,7 +146,7 @@ def subscribe():
                 response['error'] = {
                     'state' : True,
                     'value' : str(error),
-                    'msg'   : f'Your email {email} is already registered in our mailing list'
+                    'msg'   : f'Your email <span style="color: black;">{email}</span> is already registered in our mailing list'
                 }
             else:
                 response['error'] = {
@@ -207,6 +236,5 @@ def video_graphy():
 if __name__ == '__main__':
     app.run(
         host = '0.0.0.0',
-        port = 5000,
         debug = True 
     )

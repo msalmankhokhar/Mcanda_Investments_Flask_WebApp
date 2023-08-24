@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+
+{% block title %}Contact | McandaInvestments{% endblock title %}
+
 {% block mainslider %} {% endblock mainslider %}
 
 {% block mainbody %} 
@@ -118,36 +121,103 @@
                         <br>with Mcanda</h2>                      
                 </div>
                 <div class="contact-one__form-box">
-                    <form action="" id="contact-form" method="POST" class="contact-one__form contact-form-validated" novalidate="novalidate">
+                    <form id="contact-form" class="contact-one__form contact-form-validated1" novalidate="novalidate">
                            <div class="row">
                             <div class="col-xl-6">
                                 <div class="contact-one__input-box">
                                 
-                                    <input type="text" placeholder="Your Name" name="name" required>
+                                    <input type="text" id="contact-name-input" placeholder="Your Name" name="name" required>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="contact-one__input-box">
-                                    <input type="email" placeholder="Email Address" name="email" required>
+                                    <input id="contact-email-input" type="email" placeholder="Email Address" name="email" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="contact-one__input-box text-message-box">
-                                    <textarea name="msg" placeholder="Write a message for us" required></textarea>
+                                    <textarea id="contact-msg-input" name="msg" placeholder="Write a message for us" required></textarea>
                                 </div>
                                 <div class="contact-one__btn-box">
-                                    <button type="submit" class="g-recaptcha" name="submit_form" value="Send">Send a Message</button>
+                                    <button id="contact-form-btn" type="button" class="g-recaptcha">Send a Message</button>
                                     <!-- <button type="submit">Send a Message</button> -->
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <div class="result"></div>
+                    <div id="contact-form-result"></div>
                 </div>
             </div>
         </section>
         <!--Contact One End-->
         
         {% endblock mainbody %}
+
+{% block js %}
+
+let contact_form = document.getElementById('contact-form');
+let contact_form_btn = document.getElementById('contact-form-btn');
+let contact_name_input = document.getElementById('contact-name-input');
+let contact_email_input = document.getElementById('contact-email-input');
+let contact_msg_input = document.getElementById('contact-msg-input');
+let contact_form_result = document.getElementById('contact-form-result');
+
+let inputsList = [contact_msg_input, contact_email_input, contact_name_input];
+
+function validateContactForm(){
+    let isValid = true;
+    inputsList.forEach(inputElement => {
+        // console.log(inputElement);
+        if(!(inputElement.checkValidity())){
+            inputElement.reportValidity();
+            isValid = false
+            console.log('loop ran');
+        }
+    });
+    return isValid;
+}
+
+contact_form_btn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if(validateContactForm()){
+        contact_form_btn.innerHTML = 'Wait, sending your message';
+        let contactFormData =  new FormData(contact_form);
+        fetch('/contact', {
+            method: "POST",
+            body: contactFormData
+        }).then((response)=>{
+            return response.json();
+        }).then((responseJson)=>{
+            contact_form_btn.setAttribute('disabled', true);
+            if (responseJson['isEmailSent']) {
+                // contact_form_result.style.backgroundColor = '#0ca554';
+                // contact_form_result.style.color = 'white';
+                contact_form_result.style = `               
+                background-color: #0ca554;
+                color: white;
+                margin: 4vh 0px;
+                padding: 15px;               
+                `;
+                contact_form_btn.innerHTML = 'Messege sent successfully';
+            } else {
+                // contact_form_result.style.backgroundColor = 'red';
+                // contact_form_result.style.color = 'white';
+                contact_form_result.style = `               
+                background-color: red;
+                color: white;
+                margin: 4vh 0px;
+                padding: 15px;               
+                `;
+                contact_form_btn.style.backgroundColor = 'red';
+                contact_form_btn.innerHTML = 'Messege not sent';
+            }
+            contact_form.reset()
+            let msg_from_server = responseJson['msg'];
+            contact_form_result.innerHTML = `<p>${msg_from_server}</p>`;
+        })
+    }
+})
+
+{% endblock js %}

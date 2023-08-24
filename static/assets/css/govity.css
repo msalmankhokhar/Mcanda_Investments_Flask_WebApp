@@ -5084,6 +5084,9 @@ ul {
   position: relative;
   display: block;
   z-index: 1;
+  width: 39px;
+  height: 39px;
+  overflow: hidden;
 }
 
 .news-one__user-img::before {
@@ -5100,8 +5103,9 @@ ul {
 }
 
 .news-one__user-img img {
-  width: auto;
-  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  border-radius: 100%;
 }
 
 .news-one__user-text {

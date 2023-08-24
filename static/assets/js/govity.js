@@ -1,7 +1,7 @@
 jQuery(document).on('click', 'button#subscribe-newsletter', function() {
   jQuery.ajax({
       type:'POST',
-      url:'action.php',
+      url:'/contact',
       data:jQuery("form#newsletter-frm").serialize(),
       dataType:'json',    
       beforeSend: function () {
