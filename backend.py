@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from threading import Thread
@@ -49,7 +49,11 @@ db = SQLAlchemy(app)
 # Creating database schema
 class subscribers(db.Model):
     s = db.Column(db.Integer, nullable=True, unique=False)
-    email = db.Column(db.String(50), primary_key=True, nullable=False)
+    email = db.Column(db.String(100), primary_key=True, nullable=False)
+class users(db.Model):
+    username = db.Column(db.String(25), primary_key=True, nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(20), nullable=False, unique=False)
 
 # creating database tables
 with app.app_context():
@@ -57,7 +61,7 @@ with app.app_context():
 
 @app.route('/')
 def home():
-    return render_template('index.html', headertitle='Home')
+    return render_template('index.html', headertitle='Home', currentNavLink='#navlink-home')
 
 @app.route('/send', methods=['GET', 'POST'])
 def send():
@@ -75,7 +79,7 @@ def send():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'GET':
-        return render_template('contact.html', headertitle='Contact')
+        return render_template('contact.html', headertitle='Contact', currentNavLink='#navlink-contact')
     elif request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
@@ -157,12 +161,43 @@ def subscribe():
         finally:
             sleep(5)
             return response
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        selected_user = users.query.filter_by(username=username).first()
+        if selected_user != None:
+            if password == selected_user.password:
+                session['user'] = selected_user.username
+                return redirect(url_for('admin'))
+            else:
+                return 'Wrong password Try Again.<br><hr><a href="/login">Click Here to go to login page</a>'
+        else:
+            return f'Sorry, there is no account with this username <strong>{username}</strong>'
         
+@app.route('/logout/<string:givenusername>', methods=['GET', 'POST'])
+def logout(givenusername):
+    if request.method == 'GET':
+        selected_user = users.query.filter_by(username=givenusername).first()
+        if session['user'] == selected_user.username:
+            session.pop('user')
+            return redirect(url_for('admin'))
+        else:
+            return 'Sorry, An error occured in the Log Out Function'
+
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'GET':
-        userlist = subscribers.query.all()
-        return render_template('admin.html', userlist=userlist)
+        if 'user' in session:
+            userLoggedIn = users.query.filter_by(username=session['user']).first()
+            userlist = subscribers.query.all()
+            return render_template('admin.html', userlist=userlist, userLoggedIn=userLoggedIn)
+        else:
+            return redirect(url_for('login'))
 
 @app.route('/admin/delete-subscriber/<string:userEmail>', methods=['GET', 'POST'])
 def del_subs(userEmail):
@@ -191,11 +226,11 @@ def send_newsletter_mail_route(userEmail):
         
 @app.route('/faq')
 def faq():
-    return render_template('faq.html', headertitle='FAQ')
+    return render_template('faq.html', headertitle='FAQ', currentNavLink='#navlink-faq, #dropdown-about')
 
 @app.route('/about')
 def about():
-    return render_template('about.html', headertitle='About')
+    return render_template('about.html', headertitle='About', currentNavLink='#navlink-about, #dropdown-about')
 
 @app.route('/mxolisi')
 def mxolisi():
@@ -203,7 +238,7 @@ def mxolisi():
 
 @app.route('/news')
 def news():
-    return render_template('news.html', headertitle='News')
+    return render_template('news.html', headertitle='News', currentNavLink='#navlink-news')
 
 @app.route('/news-details-wed')
 def news_details_wed():
@@ -215,7 +250,7 @@ def news_details():
 
 @app.route('/our_services')
 def our_services():
-    return render_template('our-services.html', headertitle='Our Services')
+    return render_template('our-services.html', headertitle='Our Services', currentNavLink='#navlink-services')
 
 @app.route('/sibonile')
 def sibonile():
@@ -223,7 +258,7 @@ def sibonile():
 
 @app.route('/team')
 def team():
-    return render_template('team.html', headertitle='Our Team')
+    return render_template('team.html', headertitle='Our Team', currentNavLink='#navlink-team, #dropdown-about')
 
 @app.route('/team_details')
 def team_details():

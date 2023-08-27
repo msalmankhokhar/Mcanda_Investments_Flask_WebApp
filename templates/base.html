@@ -47,6 +47,10 @@
     <link rel="stylesheet" href="static/assets/css/govity-responsive.css">
 </head>
 
+<style>
+{% block css %}{% endblock css %}
+</style>
+
 <body class="custom-cursor">
 
     <div class="custom-cursor__cursor"></div>
@@ -98,7 +102,7 @@
                                     </ul>
                                     <ul class="list-unstyled main-menu__top-menu">
                                         <li><a href="{{url_for('static', filename='documents/McandaCompanyProfile.pdf')}}">Company Profile</a></li>
-                                        <li><a href="/contact">Bookings</a></li>
+                                        <li><a href="/admin">Log In</a></li>
                                         
                                     </ul>
                                 </div>
@@ -110,34 +114,29 @@
                                     <a href="#" class="mobile-nav__toggler"><i class="fa fa-bars"></i></a>
                                     <ul class="main-menu__list">
                                         <li class="dropdown megamenu">
-                                            <a href="/">Home </a>
-                                            <ul>
-                                                <li>
-                                                   
-                                                </li>
-                                            </ul>
+                                            <a id="navlink-home" href="/">Home </a>
                                         </li>
                                         <li class="dropdown">
-                                            <a href="#">About Us</a>
+                                            <a id="dropdown-about" href="#">About Us</a>
                                             <ul class="sub-menu">
-                                                <li><a href="/about">About Us</a></li>                                                
-                                                <li><a href="/team">Team</a></li>                                                
-                                                <li><a href="/faq">FAQs</a></li>
+                                                <li><a id="navlink-about" href="/about">About Us</a></li>                                                
+                                                <li><a id="navlink-team" href="/team">Team</a></li>                                                
+                                                <li><a id="navlink-faq" href="/faq">FAQs</a></li>
                                                 
                                             </ul>
                                         </li>
                                         <li class="dropdown">
-                                            <a href="/our_services">Services</a>
+                                            <a id="navlink-services" href="/our_services">Services</a>
                                             
                                         </li>
                                         
                                         <li class="dropdown">
-                                            <a href="/news">Blog</a>
+                                            <a id="navlink-news" href="/news">Blog</a>
                                             
                                         </li>
                                         
                                         <li>
-                                            <a href="/contact">Contact</a>
+                                            <a id="navlink-contact" href="/contact">Contact</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -655,7 +654,7 @@
                                 <div class="news-one__user-and-meta">
                                     <div class="news-one__user">
                                         <div class="news-one__user-img">
-                                            <img src="static/assets/images/mcanda/admin_mxo.png" alt="">
+                                            <img src="static/assets/images/mcanda/admin_2.png" alt="">
                                         </div>
                                         <div class="news-one__user-text">
                                         <a href="/mxolisi"> <p>by <br>Admin</a></p>
@@ -694,7 +693,7 @@
                                 <div class="news-one__user-and-meta">
                                     <div class="news-one__user">
                                         <div class="news-one__user-img">
-                                            <img src="static/assets/images/mcanda/admin_mxo.png" alt="">
+                                            <img src="static/assets/images/mcanda/admin_3.jpg" alt="">
                                         </div>
                                         <div class="news-one__user-text">
                                         <a href="/mxolisi"> <p>by <br>Admin</a></p>
@@ -982,10 +981,23 @@
     <!-- template js -->
     <script src="static/assets/js/govity.js"></script>
 <script type="text/javascript">
+    let currentNavLinks = document.querySelectorAll('{{currentNavLink}}');
+    currentNavLinks.forEach(element => {
+        element.style.textDecoration = 'overline';
+        element.style.color = 'black';
+        element.style.fontWeight = 'bold';
+    });
+    // let dropdown_about = document.getElementById('dropdown-about');
+    // let navlink_about = document.getElementById('navlink-about');
+    // let navlink_faq = document.getElementById('navlink-faq');
+    // let navlink_team = document.getElementById('navlink-team');
+    // let navlink_news = document.getElementById('navlink-news');
+    // let navlink_services = document.getElementById('navlink-services');
+    // let navlink_contact = document.getElementById('navlink-contact');
 
-    subsForm = document.getElementById('subs-form');
-    subsBtn = document.getElementById('subs-form-btn');
-    subsEmailInput = document.getElementById('subsEmailInput');
+    let subsForm = document.getElementById('subs-form');
+    let subsBtn = document.getElementById('subs-form-btn');
+    let subsEmailInput = document.getElementById('subsEmailInput');
 
     subsBtn.addEventListener('click', (e)=>{
         e.preventDefault();

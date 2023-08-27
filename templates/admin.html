@@ -21,11 +21,19 @@
     .dnone {
         display: none;
     }
+    nav{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
 </style>
 
 <body>
-    <div class="container">
+    <nav>
         <h1 class="text-center my-3">Manage Newsletter Emails</h1>
+        <a href="/logout/{{userLoggedIn.username}}" class="btn btn-success">Log Out</a>
+    </nav>
+    <div class="container">
         <h4 class="text-center">Send Bulk Emails to subscribers</h4>
         <p class="text-center">Send a simple text message or choose a custom HTML file for sending Email</p>
         <div class="action">
@@ -85,9 +93,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/darkreader@4.9.58/darkreader.min.js"></script>
 </body>
 
 <script>
+
+    document.body.onload = function(){
+        DarkReader.auto(false);
+        DarkReader.enable({
+            brightness: 100,
+            contrast: 90,
+            sepia: 10
+        });
+    }
 
     let textradio = document.getElementById('textradio');
     let htmlradio = document.getElementById('htmlradio');
